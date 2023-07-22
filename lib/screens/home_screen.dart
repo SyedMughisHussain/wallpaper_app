@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:wallify_app/screens/full_screen.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -10,7 +11,8 @@ class Home extends StatefulWidget {
   State<Home> createState() => _HomeState();
 }
 
-List photo = [];
+List images = [];
+bool isloading = false;
 
 class _HomeState extends State<Home> {
   String apiKey = 'tWnbVMqugoTWLZwrPdPT8ptdwkN6wUNdY0XsBUgVVFChmk0XycnQ1Ow9';
@@ -20,7 +22,7 @@ class _HomeState extends State<Home> {
         .get(Uri.parse(url), headers: {"Authorization": apiKey}).then((value) {
       Map result = jsonDecode(value.body);
       setState(() {
-        photo = result['photos'];
+        images = result['photos'];
       });
     });
   }
@@ -35,41 +37,48 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.white,
         title: const Text(
           'Wallify',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(color: Colors.black),
         ),
         centerTitle: true,
         actions: [
           IconButton(
             onPressed: () {},
             icon: const Icon(Icons.share),
-            color: Colors.white,
+            color: Colors.black,
           ),
         ],
         leading: IconButton(
           onPressed: () {},
           icon: const Icon(
             Icons.menu,
-            color: Colors.white,
+            color: Colors.black,
           ),
         ),
       ),
       body: GridView.builder(
-          itemCount: photo.length,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3,
-            mainAxisSpacing: 10,
-            crossAxisSpacing: 10,
-            childAspectRatio: 2 / 3,
-          ),
-          itemBuilder: (context, index) => Container(
-                child: Image.network(
-                  photo[index]['src']['tiny'],
-                  fit: BoxFit.cover,
-                ),
+        itemCount: images.length,
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3,
+          mainAxisSpacing: 8,
+          crossAxisSpacing: 8,
+          childAspectRatio: 2 / 3,
+        ),
+        itemBuilder: (context, index) => InkWell(
+          onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    FullScreen(images[index]['src']['large2x']),
               )),
+          child: Image.network(
+            images[index]['src']['medium'],
+            fit: BoxFit.cover,
+          ),
+        ),
+      ),
     );
   }
 }
