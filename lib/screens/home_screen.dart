@@ -1,9 +1,35 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
-import '../widgets/picture_grid_widget.dart';
-
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
   const Home({super.key});
+
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+List photo = [];
+
+class _HomeState extends State<Home> {
+  String apiKey = 'tWnbVMqugoTWLZwrPdPT8ptdwkN6wUNdY0XsBUgVVFChmk0XycnQ1Ow9';
+  getWallpapers() async {
+    const url = 'https://api.pexels.com/v1/curated?per_page=80';
+    await http
+        .get(Uri.parse(url), headers: {"Authorization": apiKey}).then((value) {
+      Map result = jsonDecode(value.body);
+      setState(() {
+        photo = result['photos'];
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getWallpapers();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +56,20 @@ class Home extends StatelessWidget {
           ),
         ),
       ),
-      body: pictureGridView(),
+      body: GridView.builder(
+          itemCount: photo.length,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 3,
+            mainAxisSpacing: 10,
+            crossAxisSpacing: 10,
+            childAspectRatio: 2 / 3,
+          ),
+          itemBuilder: (context, index) => Container(
+                child: Image.network(
+                  photo[index]['src']['tiny'],
+                  fit: BoxFit.cover,
+                ),
+              )),
     );
   }
 }
