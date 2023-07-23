@@ -40,7 +40,7 @@ class _FullScreenState extends State<FullScreen> {
             fit: BoxFit.cover,
           ),
         ),
-        rowICons(setWallpaper),
+        rowICons(setWallpaper, 'Set Wallpaper'),
       ],
     ));
   }

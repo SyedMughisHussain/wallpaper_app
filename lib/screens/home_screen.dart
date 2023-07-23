@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:wallify_app/screens/full_screen.dart';
+import '../widgets/icons_row_widget.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -13,6 +14,7 @@ class Home extends StatefulWidget {
 
 List images = [];
 bool isloading = false;
+int page = 1;
 
 class _HomeState extends State<Home> {
   String apiKey = 'tWnbVMqugoTWLZwrPdPT8ptdwkN6wUNdY0XsBUgVVFChmk0XycnQ1Ow9';
@@ -27,6 +29,20 @@ class _HomeState extends State<Home> {
     });
   }
 
+  loadMoreWallpaper() async {
+    setState(() {
+      page = page + 1;
+    });
+    String url = 'https://api.pexels.com/v1/curated?per_page=80&page=$page';
+    await http
+        .get(Uri.parse(url), headers: {'Authorization': apiKey}).then((value) {
+      Map result = jsonDecode(value.body);
+      setState(() {
+        images.addAll(result['photos']);
+      });
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -36,7 +52,8 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
-      onRefresh: getWallpapers(),
+      onRefresh: () => loadMoreWallpaper(),
+      displacement: 100,
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
@@ -60,26 +77,33 @@ class _HomeState extends State<Home> {
             ),
           ),
         ),
-        body: GridView.builder(
-          itemCount: images.length,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3,
-            mainAxisSpacing: 8,
-            crossAxisSpacing: 8,
-            childAspectRatio: 2 / 3,
-          ),
-          itemBuilder: (context, index) => InkWell(
-            onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      FullScreen(images[index]['src']['large2x']),
-                )),
-            child: Image.network(
-              images[index]['src']['medium'],
-              fit: BoxFit.cover,
+        body: Column(
+          children: [
+            Expanded(
+              child: GridView.builder(
+                itemCount: images.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  mainAxisSpacing: 8,
+                  crossAxisSpacing: 8,
+                  childAspectRatio: 2 / 3,
+                ),
+                itemBuilder: (context, index) => InkWell(
+                  onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            FullScreen(images[index]['src']['large2x']),
+                      )),
+                  child: Image.network(
+                    images[index]['src']['medium'],
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
             ),
-          ),
+            rowICons(loadMoreWallpaper, 'Load More Wallpaper'),
+          ],
         ),
       ),
     );

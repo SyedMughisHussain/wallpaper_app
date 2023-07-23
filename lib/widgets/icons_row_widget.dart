@@ -1,32 +1,17 @@
 import 'package:flutter/material.dart';
 
-Widget rowICons(Function function) {
+Widget rowICons(Function function, String buttontext) {
   return Container(
-      color: const Color.fromARGB(20, 176, 147, 147),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          IconButton(
-              onPressed: () {},
-              iconSize: 35,
-              icon: const Icon(
-                Icons.download,
-                color: Colors.white,
-              )),
-          IconButton(
-              onPressed: () {},
-              iconSize: 35,
-              icon: const Icon(
-                Icons.favorite_border,
-                color: Colors.white,
-              )),
-          IconButton(
-              onPressed: () => function(),
-              iconSize: 35,
-              icon: const Icon(
-                Icons.photo,
-                color: Colors.white,
-              )),
-        ],
-      ));
+    alignment: Alignment.center,
+    child: ElevatedButton.icon(
+      onPressed: () => function(),
+      icon: const Icon(Icons.photo),
+      label: Text(buttontext),
+      style: ElevatedButton.styleFrom(
+          backgroundColor: const Color.fromARGB(255, 227, 168, 238),
+          foregroundColor: Colors.white,
+          alignment: Alignment.center),
+    ),
+  );
+  //width: double.infinity,
 }
