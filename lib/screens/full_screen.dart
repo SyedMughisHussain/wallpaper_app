@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:wallify_app/widgets/icons_row_widget.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:flutter_wallpaper_manager/flutter_wallpaper_manager.dart';
 // import 'package:wallify_app/screens/home_screen.dart';
 
 class FullScreen extends StatefulWidget {
@@ -11,6 +14,12 @@ class FullScreen extends StatefulWidget {
 }
 
 class _FullScreenState extends State<FullScreen> {
+  Future<void> setWallpaper() async {
+    int location = WallpaperManager.HOME_SCREEN;
+    var file = await DefaultCacheManager().getSingleFile(widget.imageUrl);
+    await WallpaperManager.setWallpaperFromFile(file.path, location);
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -30,36 +39,7 @@ class _FullScreenState extends State<FullScreen> {
             fit: BoxFit.cover,
           ),
         ),
-        Row(
-//mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-//Column(
-            //crossAxisAlignment: CrossAxisAlignment.start,
-//children: [
-            IconButton(
-                onPressed: () {},
-                icon: const Icon(
-                  Icons.download,
-                  color: Colors.white,
-                )),
-            IconButton(
-                onPressed: () {},
-                icon: const Icon(
-                  Icons.favorite_border,
-                  color: Colors.white,
-                )),
-            IconButton(
-                onPressed: () {},
-                icon: const Icon(
-                  Icons.download,
-                  color: Colors.white,
-                )),
-            // const Text(
-            //   'Save',
-            //   style: TextStyle(color: Colors.white, fontSize: 12),
-            // )
-          ],
-        )
+        rowICons(setWallpaper),
       ],
     ));
   }
