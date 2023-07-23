@@ -35,47 +35,50 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: const Text(
-          'Wallify',
-          style: TextStyle(color: Colors.black),
-        ),
-        centerTitle: true,
-        actions: [
-          IconButton(
+    return RefreshIndicator(
+      onRefresh: getWallpapers(),
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          title: const Text(
+            'Wallify',
+            style: TextStyle(color: Colors.black),
+          ),
+          centerTitle: true,
+          actions: [
+            IconButton(
+              onPressed: () {},
+              icon: const Icon(Icons.share),
+              color: Colors.black,
+            ),
+          ],
+          leading: IconButton(
             onPressed: () {},
-            icon: const Icon(Icons.share),
-            color: Colors.black,
-          ),
-        ],
-        leading: IconButton(
-          onPressed: () {},
-          icon: const Icon(
-            Icons.menu,
-            color: Colors.black,
+            icon: const Icon(
+              Icons.menu,
+              color: Colors.black,
+            ),
           ),
         ),
-      ),
-      body: GridView.builder(
-        itemCount: images.length,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-          mainAxisSpacing: 8,
-          crossAxisSpacing: 8,
-          childAspectRatio: 2 / 3,
-        ),
-        itemBuilder: (context, index) => InkWell(
-          onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) =>
-                    FullScreen(images[index]['src']['large2x']),
-              )),
-          child: Image.network(
-            images[index]['src']['medium'],
-            fit: BoxFit.cover,
+        body: GridView.builder(
+          itemCount: images.length,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 3,
+            mainAxisSpacing: 8,
+            crossAxisSpacing: 8,
+            childAspectRatio: 2 / 3,
+          ),
+          itemBuilder: (context, index) => InkWell(
+            onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      FullScreen(images[index]['src']['large2x']),
+                )),
+            child: Image.network(
+              images[index]['src']['medium'],
+              fit: BoxFit.cover,
+            ),
           ),
         ),
       ),
