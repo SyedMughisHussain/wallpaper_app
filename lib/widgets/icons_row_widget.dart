@@ -8,7 +8,7 @@ Widget rowICons(Function function, String buttontext) {
       icon: const Icon(Icons.photo),
       label: Text(buttontext),
       style: ElevatedButton.styleFrom(
-          backgroundColor: const Color.fromARGB(255, 227, 168, 238),
+          backgroundColor: Colors.grey,
           foregroundColor: Colors.white,
           alignment: Alignment.center),
     ),

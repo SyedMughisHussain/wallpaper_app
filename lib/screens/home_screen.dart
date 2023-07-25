@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:wallify_app/screens/full_screen.dart';
+import '../widgets/custom_btn.dart';
 import '../widgets/icons_row_widget.dart';
 
 class Home extends StatefulWidget {
@@ -77,33 +78,35 @@ class _HomeState extends State<Home> {
             ),
           ),
         ),
-        body: Column(
-          children: [
-            Expanded(
-              child: GridView.builder(
-                itemCount: images.length,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  mainAxisSpacing: 8,
-                  crossAxisSpacing: 8,
-                  childAspectRatio: 2 / 3,
-                ),
-                itemBuilder: (context, index) => InkWell(
-                  onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            FullScreen(images[index]['src']['large2x']),
-                      )),
-                  child: Image.network(
-                    images[index]['src']['medium'],
-                    fit: BoxFit.cover,
+        body: SafeArea(
+          child: Column(
+            children: [
+              Expanded(
+                child: GridView.builder(
+                  itemCount: images.length,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    mainAxisSpacing: 8,
+                    crossAxisSpacing: 8,
+                    childAspectRatio: 2 / 3,
+                  ),
+                  itemBuilder: (context, index) => InkWell(
+                    onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              FullScreen(images[index]['src']['large2x']),
+                        )),
+                    child: Image.network(
+                      images[index]['src']['medium'],
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ),
-            ),
-            rowICons(loadMoreWallpaper, 'Load More Wallpaper'),
-          ],
+              customButtton(loadMoreWallpaper, 'Load More Wallpaper'),
+            ],
+          ),
         ),
       ),
     );
