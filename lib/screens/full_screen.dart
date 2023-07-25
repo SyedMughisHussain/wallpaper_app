@@ -17,8 +17,7 @@ class _FullScreenState extends State<FullScreen> {
   Future<void> setWallpaper() async {
     int location = WallpaperManager.HOME_SCREEN;
     var file = await DefaultCacheManager().getSingleFile(widget.imageUrl);
-    final bool result =
-        await WallpaperManager.setWallpaperFromFile(file.path, location);
+    await WallpaperManager.setWallpaperFromFile(file.path, location);
   }
 
   @override
